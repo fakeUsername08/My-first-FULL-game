@@ -1,4 +1,4 @@
-import pygame,sys,random,time
+import pygame,sys,random,time,subprocess
 
 pygame.init()
 
@@ -14,6 +14,7 @@ flag = True
 speed = 10
 sccore = 0
 font = pygame.font.Font("DS-DIGI.TTF",30)
+font_end = pygame.font.Font("DS-DIGI.TTF",60)
 
 # game
 win = pygame.display.set_mode(size)
@@ -26,6 +27,10 @@ back_new = pygame.transform.scale(back,(1200,800))
 # player
 player = pygame.image.load("pictrue/player.png")
 player_new = pygame.transform.scale(player,(80,80))
+
+# dead player
+player_crack = pygame.image.load("pictrue/player_crack.png")
+player_crack_new = pygame.transform.scale(player_crack,(80,80))
 
 # enemy (rock)
 enemy = pygame.image.load("pictrue/rock.png")
@@ -97,7 +102,24 @@ while 1:
         sccore +=1
     end = game_over()
     if end:
+        win.blit(back_new,(-300,0))
+        spawn_enemy()
+        win.blit(player_crack_new,(player_x,700))
+        pygame.display.update()
+        time.sleep(2)
+        for i in range(5,0,-1):
+            end_screen = font_end.render("Game Over",False,orange)
+            end_sccore = font_end.render(f"sccore: {sccore}",False,orange)
+            end_wait = font_end.render(str(i),False,orange)
+            win.blit(back_new,(-300,0))
+            win.blit(end_screen,(200,350))
+            win.blit(end_sccore,(200,400))
+            win.blit(end_wait,(200,450))
+            pygame.display.update()
+            time.sleep(1)
         break
-   # win.blit(enemy_new,(240,30))
     win.blit(player_new,(player_x,700))
     pygame.display.update()
+pygame.quit()
+subprocess.run(["python", "menu.py"])
+sys.exit()
